@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:device_preview/device_preview.dart';
 import 'views/patrimonio_page.dart'; // Importação relativa correta
+import 'views/auth/login_view.dart';
 
 void main() {
   runApp(
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: PatrimonioPage(),
+      home: LoginPatrimonio(),
     );
   }
 }
