@@ -36,131 +36,160 @@ class PatrimonioDetailView extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          // IMAGEM
-          Container(
-            height: 135,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.grey.shade300,
-            ),
-            child: patrimonio.imagem != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      patrimonio.imagem!,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                : const Center(
-                    child: Icon(
-                      Icons.inventory_2_outlined,
-                      size: 60,
-                      color: Colors.grey,
-                    ),
-                  ),
-          ),
-
-          const SizedBox(height: 14),
-
-          // CARD DOS DADOS
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // IMAGEM
+            Container(
+              height: 135,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
                 color: Colors.grey.shade300,
               ),
+              child: patrimonio.imagem != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        patrimonio.imagem!,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : const Center(
+                      child: Icon(
+                        Icons.inventory_2_outlined,
+                        size: 60,
+                        color: Colors.grey,
+                      ),
+                    ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+
+            const SizedBox(height: 14),
+
+            // CARD DOS DADOS
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.grey.shade300,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  campo(
+                    'Nome',
+                    patrimonio.nome,
+                  ),
+                  campo(
+                    'Código/Tombamento',
+                    patrimonio.codigo ?? 'Não informado',
+                  ),
+                  campo(
+                    'Categoria',
+                    patrimonio.categoria ?? 'Não informado',
+                  ),
+                  campo(
+                    'Número de Série',
+                    patrimonio.numeroSerie ?? 'Não informado',
+                  ),
+                  campo(
+                    'Estado de Conservação',
+                    patrimonio.estadoConservacao ?? 'Não informado',
+                  ),
+                  campo(
+                    'Responsável Atual',
+                    patrimonio.responsavel,
+                  ),
+                  campo(
+                    'Observações',
+                    patrimonio.observacoes ?? patrimonio.descricao,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // BOTÕES EDITAR E EXCLUIR
+            Row(
               children: [
-                campo(
-                  'Nome',
-                  patrimonio.nome,
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      // Tela de edição
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.blue,
+                      side: const BorderSide(
+                        color: Colors.blue,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text('Editar'),
+                  ),
                 ),
-                campo(
-                  'Código/Tombamento',
-                  patrimonio.codigo ?? 'Não informado',
-                ),
-                campo(
-                  'Categoria',
-                  patrimonio.categoria ?? 'Não informado',
-                ),
-                campo(
-                  'Número de Série',
-                  patrimonio.numeroSerie ?? 'Não informado',
-                ),
-                campo(
-                  'Estado de Conservação',
-                  patrimonio.estadoConservacao ?? 'Não informado',
-                ),
-                campo(
-                  'Responsável Atual',
-                  patrimonio.responsavel,
-                ),
-                campo(
-                  'Observações',
-                  patrimonio.observacoes ?? patrimonio.descricao,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      // Excluir patrimônio
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.red,
+                      side: const BorderSide(
+                        color: Colors.red,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text('Excluir'),
+                  ),
                 ),
               ],
             ),
-          ),
 
-          const SizedBox(height: 20),
+            const SizedBox(height: 8),
 
-          // BOTÕES EDITAR E EXCLUIR
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () {
-                    // Tela de edição
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.blue,
-                    side: const BorderSide(
-                      color: Colors.blue,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+            // DEVOLVER EQUIPAMENTO
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Devolver equipamento
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF16A34A),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
                   ),
-                  child: const Text('Editar'),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text(
+                  'Devolver Equipamento',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () {
-                    // Excluir patrimônio
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.red,
-                    side: const BorderSide(
-                      color: Colors.red,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text('Excluir'),
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 8),
-        ]),
+            ),
+          ],
+        ),
       ),
     );
   }
