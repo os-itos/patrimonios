@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import '../models/patrimonio_dados.dart';
+import '../../models/patrimonio_dados.dart';
 
 class PatrimonioService extends GetConnect {
   @override
   void onInit() {
     // Configura a URL base e o cabeçalho padrão das requisições
-    baseUrl = 'http://127.0.0.1:8000'; 
+    baseUrl = 'http://127.0.0.1:8000';
     httpClient.defaultContentType = 'application/json';
     super.onInit();
   }
@@ -16,7 +16,9 @@ class PatrimonioService extends GetConnect {
       '/patrimonios',
       decoder: (data) {
         if (data is List) {
-          return data.map((e) => Patrimonio.fromJson(e as Map<String, dynamic>)).toList();
+          return data
+              .map((e) => Patrimonio.fromJson(e as Map<String, dynamic>))
+              .toList();
         }
         return <Patrimonio>[];
       },
