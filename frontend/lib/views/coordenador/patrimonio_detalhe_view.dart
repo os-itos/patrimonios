@@ -193,4 +193,35 @@ class PatrimonioDetailView extends StatelessWidget {
       ),
     );
   }
+
+  Widget campo(String titulo, String valor) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            titulo,
+            style: TextStyle(
+              fontSize: 11,
+              color: Colors.grey.shade600,
+            ),
+          ),
+          const SizedBox(height: 3),
+          Text(
+            valor,
+            style: const TextStyle(
+              fontSize: 13,
+              color: Color(0xFF1F2937),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Divider(
+            color: Colors.grey.shade300,
+            height: 1,
+          ),
+        ],
+      ),
+    );
+  }
 }
