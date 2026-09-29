@@ -72,6 +72,22 @@ class ProfessorHomeView extends StatelessWidget {
                       ),
 
                       const SizedBox(height: 16),
+                      // CARD DE QUANTIDADE
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.04),
+                              blurRadius: 10,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
