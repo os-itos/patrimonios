@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../models/patrimonio_dados.dart';
+import '../../models/patrimonio_dados.dart';
 
 class PatrimonioService extends GetConnect {
   @override
