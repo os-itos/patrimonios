@@ -371,4 +371,4 @@ class _CadastroPatrimonioViewState extends State<CadastroPatrimonioView> {
       ),
     );
   }
-}
+} 
