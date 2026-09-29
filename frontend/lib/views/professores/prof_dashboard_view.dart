@@ -53,8 +53,25 @@ class ProfessorHomeView extends StatelessWidget {
                               ),
                             ],
                           ),
+                          Container(
+                            width: 42,
+                            height: 42,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.grey.shade200,
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.notifications_none,
+                              color: Color(0xFF263246),
+                            ),
+                          ),
                         ],
                       ),
+
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
