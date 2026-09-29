@@ -222,4 +222,63 @@ class ProfessorHomeView extends StatelessWidget {
       ),
     );
   }
+
+  Widget _menuInferior() {
+    return Container(
+      height: 56,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey.shade200,
+          ),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _itemMenu(
+            Icons.home_outlined,
+            'Início',
+            true,
+          ),
+          _itemMenu(
+            Icons.inventory_2_outlined,
+            'Patrimônios',
+            false,
+          ),
+          _itemMenu(
+            Icons.person_outline,
+            'Perfil',
+            false,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _itemMenu(
+    IconData icone,
+    String texto,
+    bool selecionado,
+  ) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          icone,
+          size: 21,
+          color: selecionado ? Colors.blue : Colors.grey[600],
+        ),
+        const SizedBox(height: 2),
+        Text(
+          texto,
+          style: TextStyle(
+            fontSize: 10,
+            color: selecionado ? Colors.blue : Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
 }
