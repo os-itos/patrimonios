@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-// Controllers
-import 'controllers/auth_controller.dart';
-
-// Views
+import 'package:device_preview/device_preview.dart';
+import 'views/patrimonio_page.dart'; 
+import 'views/coordenador/patrimonio_view.dart';
 import 'views/auth/login_view.dart';
 import 'views/auth/cadastro_view.dart';
 import 'views/auth/recuperacao_view.dart';
