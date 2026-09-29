@@ -9,20 +9,20 @@ class PatrimonioService extends GetConnect {
     super.onInit();
   }
 
-  // GET /patrimonios - Listar todos
   Future<Response<List<Patrimonio>>> listar() async {
     return await get<List<Patrimonio>>(
       '/patrimonios',
       decoder: (data) {
         if (data is List) {
-          return data.map((e) => Patrimonio.fromJson(e as Map<String, dynamic>)).toList();
+          return data
+              .map((e) => Patrimonio.fromJson(e as Map<String, dynamic>))
+              .toList();
         }
         return <Patrimonio>[];
       },
     );
   }
 
-  // GET /patrimonios/{id} - Buscar por ID
   Future<Response<Patrimonio?>> obterPorId(int id) async {
     return await get<Patrimonio?>(
       '/patrimonios/$id',
@@ -30,7 +30,6 @@ class PatrimonioService extends GetConnect {
     );
   }
 
-  // POST /patrimonios - Cadastrar novo
   Future<Response<Patrimonio?>> cadastrar(Patrimonio patrimonio) async {
     return await post<Patrimonio?>(
       '/patrimonios',
@@ -39,7 +38,6 @@ class PatrimonioService extends GetConnect {
     );
   }
 
-  // PUT /patrimonios/{id} - Atualizar existente
   Future<Response<Patrimonio?>> atualizar(int id, Patrimonio patrimonio) async {
     return await put<Patrimonio?>(
       '/patrimonios/$id',
@@ -48,12 +46,10 @@ class PatrimonioService extends GetConnect {
     );
   }
 
-  // DELETE /patrimonios/{id} - Excluir por ID
   Future<Response<void>> excluir(int id) async {
     return await delete('/patrimonios/$id');
   }
 
-  // Helper de decodificação
   Patrimonio? _decodePatrimonio(dynamic data) {
     if (data is Map<String, dynamic>) {
       return Patrimonio.fromJson(data);
