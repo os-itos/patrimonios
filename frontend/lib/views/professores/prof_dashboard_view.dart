@@ -138,13 +138,87 @@ class ProfessorHomeView extends StatelessWidget {
                           color: Color(0xFF202938),
                         ),
                       ),
+
+                      const SizedBox(height: 10),
+
+                      // LISTA DOS PATRIMÔNIOS
+                      if (controller.patrimonios.isEmpty)
+                        const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(30),
+                            child: Text(
+                              'Nenhum patrimônio atribuído.',
+                            ),
+                          ),
+                        )
+                      else
+                        ...controller.patrimonios.map(
+                          (patrimonio) => _cardPatrimonio(patrimonio),
+                        )
                     ],
                   ),
                 ),
               ),
+              // MENU INFERIOR
+              _menuInferior(),
             ],
           );
         }),
+      ),
+    );
+  }
+
+  Widget _cardPatrimonio(Patrimonio patrimonio) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: const Color(0xFFE0E3E8),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            patrimonio.nome,
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF263246),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            patrimonio.codigo ?? 'Sem código',
+            style: TextStyle(
+              fontSize: 11,
+              color: Colors.grey[500],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 4,
+            ),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEAF2FF),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Text(
+              patrimonio.local,
+              style: const TextStyle(
+                fontSize: 10,
+                color: Colors.blue,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
