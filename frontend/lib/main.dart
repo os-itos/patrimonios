@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:patrimonios_apirest/views/cordenador/atribuir_item_view.dart';
 import 'views/patrimonio_page.dart'; // Importação relativa correta
 import 'views/auth/login_view.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: LoginPatrimonio(),
+      home: AtribuirItem(),
     );
   }
 }
