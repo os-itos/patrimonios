@@ -56,3 +56,29 @@ class _Dados {
             .toList(),
       );
 }
+// ---------------- API ----------------
+// GET {_baseUrl}/dashboard
+Future<_Dados> _buscarDados() async {
+  if (_usarMock) {
+    await Future.delayed(const Duration(milliseconds: 600));
+    final agora = DateTime.now();
+    return _Dados('Coordenador', 148, 84, 52, 12, [
+      _Atividade('Notebook Dell atribuído', 'Destinatário: Prof. Maria Silva',
+          'atribuido', DateTime(agora.year, agora.month, agora.day, 10, 30)),
+      _Atividade(
+          'Projetor Epson devolvido',
+          'Devolvido por: Prof. João Souza',
+          'devolvido',
+          DateTime(agora.year, agora.month, agora.day, 16, 15)
+              .subtract(const Duration(days: 1))),
+    ]);
+  }
+  final r = await http.get(Uri.parse('$_baseUrl/dashboard'), headers: {
+    'Content-Type': 'application/json',
+    // 'Authorization': 'Bearer SEU_TOKEN',
+  }).timeout(const Duration(seconds: 15));
+  if (r.statusCode == 200) {
+    return _Dados.fromJson(jsonDecode(utf8.decode(r.bodyBytes)));
+  }
+  throw Exception('Erro ${r.statusCode} ao carregar dados');
+}
