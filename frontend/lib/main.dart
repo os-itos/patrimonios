@@ -21,18 +21,3 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Patrimônio SENAI',
       debugShowCheckedModeBanner: false,
-
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-        ),
-        useMaterial3: true,
-      ),
-
-      home: const CadastroPatrimonioView(),
-    );
-  }
-}
