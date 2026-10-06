@@ -1,131 +1,193 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../models/patrimonio_dados.dart';
+
+import '../models/historico.dart';
+import '../models/patrimonio.dart';
 import '../services/patrimonio_service.dart';
 
 class PatrimonioController extends GetxController {
-  final PatrimonioService _service = Get.put(PatrimonioService());
+  final PatrimonioService service;
 
-  // Estados reativos
-  final patrimonios = <Patrimonio>[].obs;
-  final patrimonioSelecionado = Rxn<Patrimonio>();
-  final isLoading = false.obs;
-  final termoBusca = ''.obs;
+  final RxBool isLoading = false.obs;
+  final RxList<Patrimonio> patrimonios =
+      <Patrimonio>[].obs;
+  final Rxn<Patrimonio> patrimonioSelecionado =
+      Rxn<Patrimonio>();
+  final RxList<Historico> historico =
+      <Historico>[].obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    carregarPatrimonios();
-  }
+  final Rxn<StatusPatrimonio> statusFiltro =
+      Rxn<StatusPatrimonio>();
+  final RxString categoriaFiltro = ''.obs;
+  final RxString busca = ''.obs;
+  final RxString errorMessage = ''.obs;
 
-  // 1. LISTAR
+  PatrimonioController(this.service);
+
   Future<void> carregarPatrimonios() async {
     isLoading.value = true;
-    final response = await _service.listar();
+    errorMessage.value = '';
 
-    if (response.isOk && response.body != null) {
-      patrimonios.assignAll(response.body!);
-    } else {
-      _mostrarNotificacao('Erro', 'Falha ao conectar com o servidor', Colors.red);
+    try {
+      patrimonios.assignAll(
+        await service.listar(
+          status: statusFiltro.value,
+          categoria: categoriaFiltro.value,
+          busca: busca.value,
+        ),
+      );
+    } catch (error) {
+      errorMessage.value = error.toString();
+      rethrow;
+    } finally {
+      isLoading.value = false;
     }
-    isLoading.value = false;
   }
 
-  // 2. PESQUISAR (Filtro reativo para uso direto na View)
-  List<Patrimonio> get patrimoniosFiltrados {
-    if (termoBusca.value.trim().isEmpty) {
-      return patrimonios;
-    }
-    final query = termoBusca.value.toLowerCase();
-    return patrimonios.where((p) {
-      final nome = p.nome.toLowerCase();
-      final codigo = p.codigo?.toLowerCase() ?? '';
-      return nome.contains(query) || codigo.contains(query);
-    }).toList();
-  }
-
-  void pesquisar(String query) {
-    termoBusca.value = query;
-  }
-
-  // 3. VISUALIZAR
-  Future<void> visualizar(int id) async {
+  Future<void> buscarPatrimonio(int id) async {
     isLoading.value = true;
-    final response = await _service.obterPorId(id);
 
-    if (response.isOk && response.body != null) {
-      patrimonioSelecionado.value = response.body!;
-    } else {
-      // Fallback local se o endpoint por ID não for utilizado
-      patrimonioSelecionado.value = patrimonios.firstWhereOrNull((p) => p.id == id);
-      if (patrimonioSelecionado.value == null) {
-        _mostrarNotificacao('Erro', 'Patrimônio não encontrado', Colors.red);
-      }
+    try {
+      patrimonioSelecionado.value =
+          await service.buscar(id);
+    } catch (error) {
+      errorMessage.value = error.toString();
+      rethrow;
+    } finally {
+      isLoading.value = false;
     }
-    isLoading.value = false;
   }
 
-  // 4. CADASTRAR
-  Future<void> adicionar(Patrimonio patrimonio) async {
+  Future<void> cadastrar({
+    required String tombamento,
+    required String descricao,
+    required String categoria,
+    String? marca,
+    String? numeroSerie,
+    String? localizacao,
+    StatusPatrimonio status =
+        StatusPatrimonio.disponivel,
+  }) async {
     isLoading.value = true;
-    final response = await _service.cadastrar(patrimonio);
 
-    if (response.isOk && response.body != null) {
-      patrimonios.add(response.body!);
-      Get.back();
-      _mostrarNotificacao('Sucesso', 'Patrimônio cadastrado com sucesso!', Colors.green);
-    } else {
-      _mostrarNotificacao('Erro', 'Falha ao cadastrar patrimônio', Colors.red);
+    try {
+      await service.cadastrar(
+        tombamento: tombamento,
+        descricao: descricao,
+        categoria: categoria,
+        marca: marca,
+        numeroSerie: numeroSerie,
+        localizacao: localizacao,
+        status: status,
+      );
+
+      await carregarPatrimonios();
+    } finally {
+      isLoading.value = false;
     }
-    isLoading.value = false;
   }
 
-  // 5. EDITAR
-  Future<void> editar(int id, Patrimonio patrimonio) async {
+  Future<void> atualizar({
+    required int id,
+    String? descricao,
+    String? categoria,
+    String? marca,
+    String? numeroSerie,
+    String? localizacao,
+    StatusPatrimonio? status,
+  }) async {
     isLoading.value = true;
-    final response = await _service.atualizar(id, patrimonio);
 
-    if (response.isOk && response.body != null) {
-      final index = patrimonios.indexWhere((p) => p.id == id);
-      if (index != -1) {
-        patrimonios[index] = response.body!;
-      }
-      if (patrimonioSelecionado.value?.id == id) {
-        patrimonioSelecionado.value = response.body!;
-      }
-      Get.back();
-      _mostrarNotificacao('Sucesso', 'Patrimônio atualizado com sucesso!', Colors.green);
-    } else {
-      _mostrarNotificacao('Erro', 'Falha ao atualizar patrimônio', Colors.red);
+    try {
+      await service.atualizar(
+        id: id,
+        descricao: descricao,
+        categoria: categoria,
+        marca: marca,
+        numeroSerie: numeroSerie,
+        localizacao: localizacao,
+        status: status,
+      );
+
+      await carregarPatrimonios();
+    } finally {
+      isLoading.value = false;
     }
-    isLoading.value = false;
   }
 
-  // 6. EXCLUIR
-  Future<void> remover(int id) async {
+  Future<void> excluir(int id) async {
     isLoading.value = true;
-    final response = await _service.excluir(id);
 
-    if (response.isOk) {
-      patrimonios.removeWhere((p) => p.id == id);
-      if (patrimonioSelecionado.value?.id == id) {
-        patrimonioSelecionado.value = null;
-      }
-      _mostrarNotificacao('Sucesso', 'Patrimônio excluído!', Colors.orange);
-    } else {
-      _mostrarNotificacao('Erro', 'Falha ao excluir patrimônio', Colors.red);
+    try {
+      await service.excluir(id);
+      await carregarPatrimonios();
+    } finally {
+      isLoading.value = false;
     }
-    isLoading.value = false;
   }
 
-  // Helper privado para padronizar exibição de Snackbars
-  void _mostrarNotificacao(String titulo, String mensagem, Color corFundo) {
-    Get.snackbar(
-      titulo,
-      mensagem,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: corFundo,
-      colorText: Colors.white,
-    );
+  Future<void> atribuir({
+    required int patrimonioId,
+    required int professorId,
+  }) async {
+    isLoading.value = true;
+
+    try {
+      await service.atribuir(
+        patrimonioId: patrimonioId,
+        professorId: professorId,
+      );
+
+      await carregarPatrimonios();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> devolver({
+    required int patrimonioId,
+    String? motivo,
+  }) async {
+    isLoading.value = true;
+
+    try {
+      await service.devolver(
+        patrimonioId: patrimonioId,
+        motivo: motivo,
+      );
+
+      await carregarPatrimonios();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> carregarHistorico(int patrimonioId) async {
+    isLoading.value = true;
+
+    try {
+      historico.assignAll(
+        await service.historico(patrimonioId),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void definirStatus(StatusPatrimonio? status) {
+    statusFiltro.value = status;
+  }
+
+  void definirCategoria(String categoria) {
+    categoriaFiltro.value = categoria.trim();
+  }
+
+  void definirBusca(String valor) {
+    busca.value = valor;
+  }
+
+  void limparFiltros() {
+    statusFiltro.value = null;
+    categoriaFiltro.value = '';
+    busca.value = '';
   }
 }
