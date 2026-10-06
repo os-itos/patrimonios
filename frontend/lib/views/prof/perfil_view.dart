@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../controllers/auth_controller.dart';
-import '../../../controllers/perfil_controller.dart';
-import '../../../core/errors/api_exception.dart';
-import '../../../models/usuario.dart';
+import '../../controllers/auth_controller.dart';
+import '../../controllers/perfil_controller.dart';
+import '../../core/errors/api_exception.dart';
+import '../../models/usuario.dart';
 
 class _C {
   const _C._();
