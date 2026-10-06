@@ -236,3 +236,141 @@ onChanged: onChanged,
 ],
 );
 }
+
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+backgroundColor: const Color(0xFFEFF0F4),
+
+  appBar: AppBar(
+    backgroundColor: Colors.white,
+    elevation: 0,
+    surfaceTintColor: Colors.white,
+
+    leading: IconButton(
+      onPressed: () {
+        Get.back();
+      },
+      icon: const Icon(
+        Icons.arrow_back,
+        color: Color(0xFF263142),
+        size: 22,
+      ),
+    ),
+
+    title: const Text(
+      'Novo Patrimônio',
+      style: TextStyle(
+        color: Color(0xFF263142),
+        fontSize: 15,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+
+    centerTitle: false,
+  ),
+
+  body: SafeArea(
+    child: Form(
+      key: _formKey,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          12,
+          12,
+          12,
+          24,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            campoTexto(
+              titulo: 'Nome do Patrimônio',
+              hint: 'Ex: Notebook Dell Latitude',
+              controller: nomeController,
+            ),
+
+            const SizedBox(height: 12),
+
+            campoTexto(
+              titulo: 'Código/Tombamento',
+              hint: 'Ex: PAT-2024-0099',
+              controller: codigoController,
+            ),
+
+            const SizedBox(height: 12),
+
+            campoDropdown(
+              titulo: 'Categoria',
+              hint: 'Selecione a categoria',
+              valor: categoriaSelecionada,
+              itens: categorias,
+              onChanged: (value) {
+                setState(() {
+                  categoriaSelecionada = value;
+                });
+              },
+            ),
+
+            const SizedBox(height: 12),
+
+            campoTexto(
+              titulo: 'Número de Série',
+              hint: 'Ex: SN8201K72L',
+              controller: serieController,
+            ),
+
+            const SizedBox(height: 12),
+
+            campoDropdown(
+              titulo: 'Estado de Conservação',
+              hint: 'Selecione o estado',
+              valor: estadoSelecionado,
+              itens: estados,
+              onChanged: (value) {
+                setState(() {
+                  estadoSelecionado = value;
+                });
+              },
+            ),
+
+            const SizedBox(height: 12),
+
+            campoTexto(
+              titulo: 'Observações',
+              hint: 'Adicione notas sobre acessórios, marcas de uso,\netc.',
+              controller: observacoesController,
+              maxLines: 3,
+            ),
+
+            const SizedBox(height: 24),
+
+            SizedBox(
+              height: 44,
+              child: ElevatedButton(
+                onPressed: salvarPatrimonio,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF2059D6),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+                child: const Text(
+                  'Salvar Patrimônio',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  ),
+);
+
+}
+}
