@@ -103,9 +103,7 @@ class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ============================================================
-              // CARD DO PATRIMÔNIO
-              // ============================================================
+
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(
@@ -194,5 +192,147 @@ class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
               ),
 
               const SizedBox(height: 14),
+
+              const Text(
+                'Estado de Conservação na Entrega',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: darkTextColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+
+              const SizedBox(height: 5),
+
+              Container(
+                width: double.infinity,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: borderColor,
+                    width: 1,
+                  ),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: _estadoConservacao,
+                    isExpanded: true,
+                    icon: const Padding(
+                      padding: EdgeInsets.only(right: 8),
+                      child: Icon(
+                        Icons.keyboard_arrow_down,
+                        size: 18,
+                        color: secondaryTextColor,
+                      ),
+                    ),
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                    dropdownColor: Colors.white,
+
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: secondaryTextColor,
+                      fontWeight: FontWeight.w400,
+                    ),
+
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'Excelente / Bom',
+                        child: Text('Excelente / Bom'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Bom',
+                        child: Text('Bom'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Regular',
+                        child: Text('Regular'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Ruim',
+                        child: Text('Ruim'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Danificado',
+                        child: Text('Danificado'),
+                      ),
+                    ],
+
+                    onChanged: (value) {
+                      if (value == null) return;
+
+                      setState(() {
+                        _estadoConservacao = value;
+                      });
+                    },
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 13),
+
+              const Text(
+                'Observações de Devolução',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: darkTextColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+
+              const SizedBox(height: 5),
+
+              Container(
+                width: double.infinity,
+                height: 59,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: borderColor,
+                    width: 1,
+                  ),
+                ),
+                child: TextField(
+                  controller: _observacoesController,
+                  maxLines: 3,
+                  minLines: 3,
+                  textInputAction: TextInputAction.newline,
+
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: darkTextColor,
+                    height: 1.25,
+                  ),
+
+                  decoration: const InputDecoration(
+                    hintText:
+                        'Registre se o item possui avarias ou acessórios\n'
+                        'pendentes.',
+
+                    hintStyle: TextStyle(
+                      fontSize: 11,
+                      color: secondaryTextColor,
+                      height: 1.25,
+                    ),
+
+                    border: InputBorder.none,
+
+                    contentPadding: EdgeInsets.fromLTRB(
+                      8,
+                      7,
+                      8,
+                      6,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 34),
+
 
 
