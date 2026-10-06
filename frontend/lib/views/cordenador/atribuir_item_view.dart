@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AtribuirItem extends StatelessWidget {
-  final Item item;
+  const AtribuirItem({super.key});
 
-  const AtribuirItem({
-    super.key,
-    required this.item,
-  });
+  final String status = "Disponível"; 
 
   @override
   Widget build(BuildContext context) {
@@ -52,49 +49,55 @@ class AtribuirItem extends StatelessWidget {
 
                   const SizedBox(height: 10),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item.nome,
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w800,
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Notebook Dell Latitude 5430",
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+
+                            Text(
+                              "PAT-2024-0041",
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: status == "Disponível"
+                                ? const Color.fromARGB(120, 102, 255, 117)
+                                : const Color.fromARGB(100, 255, 100, 100),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            status,
+                            style: TextStyle(
+                              color: status == "Disponível"
+                                  ? const Color.fromARGB(255, 50, 169, 80)
+                                  : const Color.fromARGB(255, 200, 50, 50),
                             ),
                           ),
-
-                          Text(
-                            item.patrimonio,
-                          ),
-                        ],
-                      ),
-
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 5,
                         ),
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(
-                            120,
-                            102,
-                            255,
-                            117,
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          item.status,
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 50, 169, 80),
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

@@ -5,6 +5,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:patrimonios_apirest/views/cordenador/atribuir_item_view.dart';
 import 'views/patrimonio_page.dart'; // Importação relativa correta
 import 'views/auth/login_view.dart';
+import 'views/cordenador/atribuir_item_view.dart';
 
 void main() {
   runApp(
