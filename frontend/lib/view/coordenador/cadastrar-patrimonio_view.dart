@@ -105,3 +105,44 @@ Future.delayed(const Duration(milliseconds: 500), () {
 });
 
 }
+
+InputDecoration campoDecoracao({
+required String hintText,
+Widget? suffixIcon,
+}) {
+return InputDecoration(
+hintText: hintText,
+hintStyle: const TextStyle(
+color: Color(0xFF7A8190),
+fontSize: 12,
+),
+filled: true,
+fillColor: const Color(0xFFF8F8F8),
+contentPadding: const EdgeInsets.symmetric(
+horizontal: 10,
+vertical: 10,
+),
+suffixIcon: suffixIcon,
+border: OutlineInputBorder(
+borderRadius: BorderRadius.circular(6),
+borderSide: const BorderSide(
+color: Color(0xFFD9DCE1),
+width: 1,
+),
+),
+enabledBorder: OutlineInputBorder(
+borderRadius: BorderRadius.circular(6),
+borderSide: const BorderSide(
+color: Color(0xFFD9DCE1),
+width: 1,
+),
+),
+focusedBorder: OutlineInputBorder(
+borderRadius: BorderRadius.circular(6),
+borderSide: const BorderSide(
+color: Color(0xFF1E5BD7),
+width: 1.5,
+),
+),
+);
+}
