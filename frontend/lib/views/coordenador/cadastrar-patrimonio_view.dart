@@ -1,5 +1,5 @@
-import 'package/material.dart';
-import 'package/get.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CadastroPatrimonioView extends StatefulWidget {
 const CadastroPatrimonioView({super.key});
