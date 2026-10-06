@@ -2,10 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:device_preview/device_preview.dart';
-import 'views/patrimonio_page.dart'; // Importação relativa correta
+import 'views/patrimonio_page.dart';
+import 'views/professores/prof_dashboard_view.dart'; // Importação relativa correta
 import 'views/auth/login_view.dart';
+import 'controllers/patrimonio_controller.dart';
 
 void main() {
+  Get.put(PatrimonioController());
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
