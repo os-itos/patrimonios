@@ -21,3 +21,12 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Patrimônio SENAI',
       debugShowCheckedModeBanner: false,
+
+      class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      title: 'Patrimônio SENAI',
+      debugShowCheckedModeBanner: false,
