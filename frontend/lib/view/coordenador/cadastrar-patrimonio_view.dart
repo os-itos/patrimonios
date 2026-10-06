@@ -76,3 +76,32 @@ if (estadoSelecionado == null) {
   return;
 }
 
+// Dados preenchidos no formulário.
+final patrimonio = {
+  'nome': nomeController.text.trim(),
+  'codigo_tombamento': codigoController.text.trim(),
+  'categoria': categoriaSelecionada,
+  'numero_serie': serieController.text.trim(),
+  'estado_conservacao': estadoSelecionado,
+  'observacoes': observacoesController.text.trim(),
+};
+
+debugPrint('Patrimônio cadastrado: $patrimonio');
+
+Get.snackbar(
+  'Sucesso',
+  'Patrimônio cadastrado com sucesso!',
+  snackPosition: SnackPosition.BOTTOM,
+  backgroundColor: Colors.green,
+  colorText: Colors.white,
+  margin: const EdgeInsets.all(16),
+  duration: const Duration(seconds: 2),
+);
+
+Future.delayed(const Duration(milliseconds: 500), () {
+  if (mounted) {
+    Get.back();
+  }
+});
+
+}
