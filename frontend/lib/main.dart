@@ -22,11 +22,12 @@ class MyApp extends StatelessWidget {
       title: 'Patrimônio SENAI',
       debugShowCheckedModeBanner: false,
 
-      class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
 
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Patrimônio SENAI',
-      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+        ),
+
+        
