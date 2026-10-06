@@ -334,5 +334,42 @@ class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
 
               const SizedBox(height: 34),
 
+              SizedBox(
+                width: double.infinity,
+                height: 31,
+                child: ElevatedButton(
+                  onPressed: _confirmarDevolucao,
+
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: greenColor,
+                    foregroundColor: Colors.white,
+
+                    elevation: 0,
+
+                    padding: EdgeInsets.zero,
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+
+                    textStyle: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+
+                  child: const Text(
+                    'Confirmar Devolução',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 
