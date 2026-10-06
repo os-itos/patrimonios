@@ -15,4 +15,25 @@ final _formKey = GlobalKey<FormState>();
 final TextEditingController nomeController = TextEditingController();
 final TextEditingController codigoController = TextEditingController();
 final TextEditingController serieController = TextEditingController();
-final TextEditingController obser
+final TextEditingController observacoesController =
+TextEditingController();
+
+String? categoriaSelecionada;
+String? estadoSelecionado;
+
+final List<String> categorias = [
+'Informática',
+'Mobiliário',
+'Eletrônicos',
+'Ferramentas',
+'Equipamentos',
+'Outros',
+];
+
+final List<String> estados = [
+'Novo',
+'Bom',
+'Regular',
+'Ruim',
+'Danificado',
+];
