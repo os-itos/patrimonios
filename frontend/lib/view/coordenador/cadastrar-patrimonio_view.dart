@@ -37,3 +37,42 @@ final List<String> estados = [
 'Ruim',
 'Danificado',
 ];
+
+@override
+void dispose() {
+nomeController.dispose();
+codigoController.dispose();
+serieController.dispose();
+observacoesController.dispose();
+super.dispose();
+}
+
+void salvarPatrimonio() {
+if (!_formKey.currentState!.validate()) {
+return;
+}
+
+if (categoriaSelecionada == null) {
+  Get.snackbar(
+    'Atenção',
+    'Selecione uma categoria.',
+    snackPosition: SnackPosition.BOTTOM,
+    backgroundColor: Colors.orange,
+    colorText: Colors.white,
+    margin: const EdgeInsets.all(16),
+  );
+  return;
+}
+
+if (estadoSelecionado == null) {
+  Get.snackbar(
+    'Atenção',
+    'Selecione o estado de conservação.',
+    snackPosition: SnackPosition.BOTTOM,
+    backgroundColor: Colors.orange,
+    colorText: Colors.white,
+    margin: const EdgeInsets.all(16),
+  );
+  return;
+}
+
