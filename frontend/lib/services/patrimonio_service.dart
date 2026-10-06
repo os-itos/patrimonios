@@ -1,63 +1,148 @@
-import 'package:get/get.dart';
-import '../models/patrimonio_dados.dart';
+import '../models/historico.dart';
+import '../models/patrimonio.dart';
+import 'api_service.dart';
 
-class PatrimonioService extends GetConnect {
-  @override
-  void onInit() {
-    baseUrl = 'http://127.0.0.1:8000';
-    httpClient.defaultContentType = 'application/json';
-    super.onInit();
+class PatrimonioService {
+  final ApiService api;
+
+  const PatrimonioService(this.api);
+
+  Future<List<Patrimonio>> listar({
+    StatusPatrimonio? status,
+    String? categoria,
+    String? busca,
+  }) async {
+    final query = <String, String>{};
+
+    if (status != null) {
+      query['status'] = status.apiValue;
+    }
+
+    if (categoria != null &&
+        categoria.trim().isNotEmpty) {
+      query['categoria'] = categoria.trim();
+    }
+
+    if (busca != null &&
+        busca.trim().isNotEmpty) {
+      query['busca'] = busca.trim();
+    }
+
+    final response = await api.get(
+      '/patrimonios',
+      queryParameters:
+          query.isEmpty ? null : query,
+    );
+
+    final list = List<dynamic>.from(response as List);
+
+    return list
+        .map(
+          (item) => Patrimonio.fromJson(
+            Map<String, dynamic>.from(item as Map),
+          ),
+        )
+        .toList();
   }
 
-  // GET /patrimonios - Listar todos
-  Future<Response<List<Patrimonio>>> listar() async {
-    return await get<List<Patrimonio>>(
+  Future<Patrimonio> buscar(int id) async {
+    final response = await api.get(
+      '/patrimonios/$id',
+    );
+
+    return Patrimonio.fromJson(
+      Map<String, dynamic>.from(response as Map),
+    );
+  }
+
+  Future<void> cadastrar({
+    required String tombamento,
+    required String descricao,
+    required String categoria,
+    String? marca,
+    String? numeroSerie,
+    String? localizacao,
+    StatusPatrimonio status = StatusPatrimonio.disponivel,
+  }) async {
+    await api.post(
       '/patrimonios',
-      decoder: (data) {
-        if (data is List) {
-          return data.map((e) => Patrimonio.fromJson(e as Map<String, dynamic>)).toList();
-        }
-        return <Patrimonio>[];
+      body: {
+        'tombamento': tombamento,
+        'descricao': descricao,
+        'categoria': categoria,
+        'marca': marca,
+        'numero_serie': numeroSerie,
+        'localizacao': localizacao,
+        'status': status.apiValue,
       },
     );
   }
 
-  // GET /patrimonios/{id} - Buscar por ID
-  Future<Response<Patrimonio?>> obterPorId(int id) async {
-    return await get<Patrimonio?>(
+  Future<void> atualizar({
+    required int id,
+    String? descricao,
+    String? categoria,
+    String? marca,
+    String? numeroSerie,
+    String? localizacao,
+    StatusPatrimonio? status,
+  }) async {
+    await api.put(
       '/patrimonios/$id',
-      decoder: (data) => _decodePatrimonio(data),
+      body: {
+        'descricao': descricao,
+        'categoria': categoria,
+        'marca': marca,
+        'numero_serie': numeroSerie,
+        'localizacao': localizacao,
+        'status': status?.apiValue,
+      },
     );
   }
 
-  // POST /patrimonios - Cadastrar novo
-  Future<Response<Patrimonio?>> cadastrar(Patrimonio patrimonio) async {
-    return await post<Patrimonio?>(
-      '/patrimonios',
-      patrimonio.toJson(),
-      decoder: (data) => _decodePatrimonio(data),
+  Future<void> excluir(int id) async {
+    await api.delete('/patrimonios/$id');
+  }
+
+  Future<void> atribuir({
+    required int patrimonioId,
+    required int professorId,
+  }) async {
+    await api.post(
+      '/patrimonios/$patrimonioId/atribuir',
+      body: {
+        'professor_id': professorId,
+      },
     );
   }
 
-  // PUT /patrimonios/{id} - Atualizar existente
-  Future<Response<Patrimonio?>> atualizar(int id, Patrimonio patrimonio) async {
-    return await put<Patrimonio?>(
-      '/patrimonios/$id',
-      patrimonio.toJson(),
-      decoder: (data) => _decodePatrimonio(data),
+  Future<void> devolver({
+    required int patrimonioId,
+    String? motivo,
+  }) async {
+    await api.post(
+      '/patrimonios/$patrimonioId/devolver',
+      body: {
+        'motivo': motivo,
+      },
     );
   }
 
-  // DELETE /patrimonios/{id} - Excluir por ID
-  Future<Response<void>> excluir(int id) async {
-    return await delete('/patrimonios/$id');
-  }
+  Future<List<Historico>> historico(
+    int patrimonioId,
+  ) async {
+    final response = await api.get(
+      '/patrimonios/$patrimonioId/historico',
+    );
 
-  // Helper de decodificação
-  Patrimonio? _decodePatrimonio(dynamic data) {
-    if (data is Map<String, dynamic>) {
-      return Patrimonio.fromJson(data);
-    }
-    return null;
+    final list = List<dynamic>.from(response as List);
+
+    return list
+        .map(
+          (item) => Historico.fromJson(
+            Map<String, dynamic>.from(item as Map),
+          ),
+        )
+        .toList();
   }
 }
