@@ -186,4 +186,156 @@ class PerfilPage extends StatelessWidget {
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
+            ),
+          const SizedBox(height: 9),
+          Container(
+            height: 1,
+            color: const Color(0xFFE5E7EB),
+          ),
+          const SizedBox(height: 10),
+          _informacao(
+            'Nome da Escola',
+            'Escola Estadual D. Pedro II',
+          ),
+          const SizedBox(height: 8),
+          _informacao(
+            'CNPJ',
+            '12.345.678/0001-90',
+          ),
+          const SizedBox(height: 8),
+          _informacao(
+            'Endereço',
+            'Av. Paulista, 1000 - São Paulo/SP',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _informacao(String titulo, String valor) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          titulo,
+          style: const TextStyle(
+            color: Color(0xFF697386),
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          valor,
+          style: const TextStyle(
+            color: Color(0xFF263143),
+            fontSize: 13,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _botao({
+    required String texto,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      height: 37,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(
+            color: Color(0xFF1557FF),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(7),
+          ),
+        ),
+        child: Text(
+          texto,
+          style: const TextStyle(
+            color: Color(0xFF1557FF),
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _bottomNavigation() {
+    return Container(
+      height: 80,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(
+            color: Color(0xFFE2E5EA),
+          ),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _itemNav(
+            Icons.home_outlined,
+            'Início',
+            false,
+          ),
+          _itemNav(
+            Icons.inventory_2_outlined,
+            'Patrimônios',
+            false,
+          ),
+          _itemNav(
+            Icons.people_outline,
+            'Professores',
+            false,
+          ),
+          _itemNav(
+            Icons.person_outline,
+            'Perfil',
+            true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _itemNav(
+    IconData icone,
+    String texto,
+    bool selecionado,
+  ) {
+    final cor = selecionado
+        ? const Color(0xFF1557FF)
+        : const Color(0xFF697386);
+
+    return SizedBox(
+      width: 70,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icone,
+            size: 22,
+            color: cor,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            texto,
+            style: TextStyle(
+              color: cor,
+              fontSize: 10,
+              fontWeight:
+                  selecionado ? FontWeight.w500 : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+            
           
