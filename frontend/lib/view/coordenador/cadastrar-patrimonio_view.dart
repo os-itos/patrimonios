@@ -146,3 +146,93 @@ width: 1.5,
 ),
 );
 }
+
+Widget tituloCampo(String texto) {
+return Padding(
+padding: const EdgeInsets.only(bottom: 6),
+child: Text(
+texto,
+style: const TextStyle(
+fontSize: 11,
+fontWeight: FontWeight.w600,
+color: Color(0xFF263142),
+),
+),
+);
+}
+
+Widget campoTexto({
+required String titulo,
+required String hint,
+required TextEditingController controller,
+int maxLines = 1,
+}) {
+return Column(
+crossAxisAlignment: CrossAxisAlignment.start,
+children: [
+tituloCampo(titulo),
+TextFormField(
+controller: controller,
+maxLines: maxLines,
+style: const TextStyle(
+fontSize: 12,
+color: Color(0xFF263142),
+),
+decoration: campoDecoracao(
+hintText: hint,
+),
+validator: (value) {
+if (value == null || value.trim().isEmpty) {
+return 'Preencha este campo';
+}
+return null;
+},
+),
+],
+);
+}
+
+Widget campoDropdown({
+required String titulo,
+required String hint,
+required String? valor,
+required List<String> itens,
+required ValueChanged<String?> onChanged,
+}) {
+return Column(
+crossAxisAlignment: CrossAxisAlignment.start,
+children: [
+tituloCampo(titulo),
+DropdownButtonFormField<String>(
+value: valor,
+isExpanded: true,
+icon: const Icon(
+Icons.keyboard_arrow_down,
+size: 18,
+color: Color(0xFF647080),
+),
+style: const TextStyle(
+fontSize: 12,
+color: Color(0xFF263142),
+),
+decoration: campoDecoracao(
+hintText: hint,
+),
+hint: Text(
+hint,
+style: const TextStyle(
+color: Color(0xFF7A8190),
+fontSize: 12,
+),
+),
+items: itens.map((item) {
+return DropdownMenuItem<String>(
+value: item,
+child: Text(item),
+);
+}).toList(),
+onChanged: onChanged,
+),
+],
+);
+}
