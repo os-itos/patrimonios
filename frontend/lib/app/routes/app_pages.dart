@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 
-import '../../views/auth/login_view.dart';
-import '../../views/coordenador/patrimonio_detalhe_view.dart';
+import //coloque as views aqui
 import 'app_routes.dart';
 
 class AppPages {
