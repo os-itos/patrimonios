@@ -443,7 +443,6 @@ class _PatrimonioListViewState extends State<PatrimonioListView> {
     );
   }
 }
-
 class _StatusStyle {
   final String label;
   final Color color;
@@ -451,3 +450,4 @@ class _StatusStyle {
 
   const _StatusStyle(this.label, this.color, this.background);
 }
+
