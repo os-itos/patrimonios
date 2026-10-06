@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '/controllers/patrimonio_controller.dart';
 import '/models/patrimonio.dart';
 
@@ -12,6 +13,7 @@ class ProfessorHomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
+
       body: SafeArea(
         child: Obx(() {
           if (controller.isLoading.value) {
@@ -51,6 +53,7 @@ class ProfessorHomeView extends StatelessWidget {
                               ),
                             ],
                           ),
+
                           Container(
                             width: 42,
                             height: 42,
@@ -68,6 +71,7 @@ class ProfessorHomeView extends StatelessWidget {
                       ),
 
                       const SizedBox(height: 16),
+
                       // CARD DE QUANTIDADE
                       Container(
                         width: double.infinity,
@@ -112,7 +116,9 @@ class ProfessorHomeView extends StatelessWidget {
                                 ),
                               ],
                             ),
+
                             const SizedBox(height: 10),
+
                             Text(
                               '${controller.patrimonios.length}',
                               style: const TextStyle(
@@ -124,6 +130,7 @@ class ProfessorHomeView extends StatelessWidget {
                           ],
                         ),
                       ),
+
                       const SizedBox(height: 22),
 
                       const Text(
@@ -153,6 +160,7 @@ class ProfessorHomeView extends StatelessWidget {
                   ),
                 ),
               ),
+
               // MENU INFERIOR
               _menuInferior(),
             ],
@@ -162,10 +170,11 @@ class ProfessorHomeView extends StatelessWidget {
     );
   }
 
+  // CARD DO PATRIMÔNIO
   Widget _cardPatrimonio(Patrimonio patrimonio) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -175,6 +184,7 @@ class ProfessorHomeView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // DESCRIÇÃO
           Text(
             patrimonio.descricao,
             style: const TextStyle(
@@ -183,32 +193,108 @@ class ProfessorHomeView extends StatelessWidget {
               color: Color(0xFF263246),
             ),
           ),
+
           const SizedBox(height: 4),
+
+          // TOMBAMENTO
           Text(
-            patrimonio.tombamento,
+            'Tombamento: ${patrimonio.tombamento}',
             style: TextStyle(fontSize: 11, color: Colors.grey[500]),
           ),
+
+          const SizedBox(height: 4),
+
+          // CATEGORIA
+          Text(
+            'Categoria: ${patrimonio.categoria}',
+            style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+          ),
+
+          // MARCA
+          if (patrimonio.marca != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              'Marca: ${patrimonio.marca}',
+              style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+            ),
+          ],
+
           const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: const Color(0xFFEAF2FF),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Text(
-              patrimonio.localizacao ?? 'Sem localização',
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.blue,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+
+          // LOCALIZAÇÃO E STATUS
+          Row(
+            children: [
+              // LOCALIZAÇÃO
+              if (patrimonio.localizacao != null)
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEAF2FF),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      patrimonio.localizacao!,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+
+              if (patrimonio.localizacao != null) const SizedBox(width: 8),
+
+              // STATUS
+              _statusBadge(patrimonio.status),
+            ],
           ),
         ],
       ),
     );
   }
 
+  // STATUS DO PATRIMÔNIO
+  Widget _statusBadge(StatusPatrimonio status) {
+    Color cor;
+    Color fundo;
+
+    switch (status) {
+      case StatusPatrimonio.disponivel:
+        cor = Colors.green;
+        fundo = const Color(0xFFE8F5E9);
+        break;
+
+      case StatusPatrimonio.emUso:
+        cor = Colors.blue;
+        fundo = const Color(0xFFEAF2FF);
+        break;
+
+      case StatusPatrimonio.emManutencao:
+        cor = Colors.orange;
+        fundo = const Color(0xFFFFF3E0);
+        break;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      decoration: BoxDecoration(
+        color: fundo,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Text(
+        status.label,
+        style: TextStyle(fontSize: 10, color: cor, fontWeight: FontWeight.w600),
+      ),
+    );
+  }
+
+  // MENU INFERIOR
   Widget _menuInferior() {
     return Container(
       height: 56,
@@ -227,6 +313,7 @@ class ProfessorHomeView extends StatelessWidget {
     );
   }
 
+  // ITEM DO MENU
   Widget _itemMenu(IconData icone, String texto, bool selecionado) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -236,7 +323,9 @@ class ProfessorHomeView extends StatelessWidget {
           size: 21,
           color: selecionado ? Colors.blue : Colors.grey[600],
         ),
+
         const SizedBox(height: 2),
+
         Text(
           texto,
           style: TextStyle(
