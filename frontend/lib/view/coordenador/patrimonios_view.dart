@@ -45,7 +45,6 @@ class _PatrimonioListViewState extends State<PatrimonioListView> {
     try {
       await controller.carregarPatrimonios();
     } catch (_) {
-      // O erro fica em controller.errorMessage.
     }
   }
 

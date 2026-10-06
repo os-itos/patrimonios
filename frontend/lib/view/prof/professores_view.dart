@@ -5,7 +5,6 @@ import '../../app/routes/app_routes.dart';
 import '../../controllers/professor_controller.dart';
 import '../../models/professor.dart';
 
-/// Tela de listagem de professores (admin).
 /// Rota: [AppRoutes.adminProfessores].
 class ProfessorListView extends StatefulWidget {
   const ProfessorListView({super.key});
@@ -43,7 +42,6 @@ class _ProfessorListViewState extends State<ProfessorListView> {
     try {
       await controller.carregarProfessores();
     } catch (_) {
-      // O erro fica em controller.errorMessage.
     }
   }
 
@@ -59,8 +57,6 @@ class _ProfessorListViewState extends State<ProfessorListView> {
     await Get.toNamed(AppRoutes.adminCadastrarProfessor);
     _carregar();
   }
-
-  // A API de professores não tem busca; o filtro é feito localmente.
   List<Professor> _filtrar(List<Professor> lista) {
     final termo = _busca.value.trim().toLowerCase();
     if (termo.isEmpty) return lista;

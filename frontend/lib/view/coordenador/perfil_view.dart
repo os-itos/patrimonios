@@ -6,8 +6,7 @@ import '/controllers/auth_controller.dart';
 import '/controllers/perfil_controller.dart';
 import '/models/usuario.dart';
 
-/// Tela de perfil.
-/// Rota: [AppRoutes.professorPerfil] (a mesma usada pela barra inferior).
+/// Rota: [AppRoutes.professorPerfil] 
 class PerfilView extends StatefulWidget {
   const PerfilView({super.key});
 
@@ -57,8 +56,6 @@ class _PerfilViewState extends State<PerfilView> {
       colorText: _title,
     );
   }
-
-  // ---------- Ações ----------
 
   Future<void> _editarDados(Usuario usuario) async {
     final nomeCtrl = TextEditingController(text: usuario.nome);
@@ -217,8 +214,6 @@ class _PerfilViewState extends State<PerfilView> {
       await auth.logout();
     }
   }
-
-  // ---------- UI ----------
 
   @override
   Widget build(BuildContext context) {
