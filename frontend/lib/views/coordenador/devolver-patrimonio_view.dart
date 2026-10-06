@@ -96,3 +96,103 @@ class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
           ],
         ),
 
+        body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(18, 14, 18, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ============================================================
+              // CARD DO PATRIMÔNIO
+              // ============================================================
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(
+                  11,
+                  10,
+                  11,
+                  11,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(9),
+                  border: Border.all(
+                    color: borderColor,
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Item a devolver:',
+                      style: TextStyle(
+                        fontSize: 10,
+                        height: 1.1,
+                        color: secondaryTextColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+
+                    const SizedBox(height: 1),
+
+                    Text(
+                      widget.item,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        height: 1.2,
+                        color: darkTextColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+
+                    const SizedBox(height: 2),
+
+                    Text(
+                      widget.patrimonio,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        height: 1.2,
+                        color: secondaryTextColor,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    Container(
+                      height: 1,
+                      color: const Color(0xFFE9EBEF),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    const Text(
+                      'Responsável Atual:',
+                      style: TextStyle(
+                        fontSize: 10,
+                        height: 1.1,
+                        color: secondaryTextColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+
+                    const SizedBox(height: 1),
+
+                    Text(
+                      widget.responsavel,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        height: 1.2,
+                        color: darkTextColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 14),
+
+
