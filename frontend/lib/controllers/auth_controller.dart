@@ -48,6 +48,7 @@ class AuthController extends GetxController {
       await sessionManager.setSession(
         token: response.accessToken,
         user: response.usuario,
+        refreshToken: response.refreshToken,
       );
 
       if (response.usuario.isAdmin) {
@@ -104,7 +105,7 @@ class AuthController extends GetxController {
 
     try {
       try {
-        await authService.logout();
+        await authService.logout(await storage.getRefreshToken());
       } catch (_) {}
 
       await sessionManager.clear();

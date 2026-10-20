@@ -7,9 +7,12 @@ class ProfessorService {
   const ProfessorService(this.api);
 
   Future<List<Professor>> listar() async {
-    final response = await api.get('/professores');
+    final response = await api.get('/admin/professores');
 
-    final list = List<dynamic>.from(response as List);
+    // Resposta: { "total": 2, "professores": [ ... ] }
+    final list = List<dynamic>.from(
+      (response as Map)['professores'] as List? ?? const [],
+    );
 
     return list
         .map(
@@ -22,11 +25,15 @@ class ProfessorService {
 
   Future<Professor> buscar(int id) async {
     final response = await api.get(
-      '/professores/$id',
+      '/admin/professores/$id',
     );
 
+    // Resposta: { "professor": { ... }, "patrimonios": [ ... ] }
+    final data = Map<String, dynamic>.from(response as Map);
+
     return Professor.fromJson(
-      Map<String, dynamic>.from(response as Map),
+      Map<String, dynamic>.from(data['professor'] as Map),
+      patrimonios: data['patrimonios'] as List?,
     );
   }
 
@@ -39,14 +46,14 @@ class ProfessorService {
     String? departamento,
   }) async {
     await api.post(
-      '/professores',
+      '/admin/professores',
       body: {
         'nome': nome,
         'email': email,
-        'senha': senha,
-        'telefone': telefone,
-        'matricula': matricula,
-        'departamento': departamento,
+        'password': senha,
+        if (telefone != null) 'telefone': telefone,
+        if (matricula != null) 'matricula': matricula,
+        if (departamento != null) 'departamento': departamento,
       },
     );
   }

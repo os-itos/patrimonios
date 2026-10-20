@@ -15,7 +15,7 @@ class AuthService {
       '/auth/login',
       body: {
         'email': email,
-        'senha': senha,
+        'password': senha,
       },
       requiresAuth: false,
     );
@@ -26,7 +26,7 @@ class AuthService {
   }
 
   Future<Usuario> me() async {
-    final response = await api.get('/me');
+    final response = await api.get('/profile');
 
     return Usuario.fromJson(
       Map<String, dynamic>.from(response as Map),
@@ -37,7 +37,7 @@ class AuthService {
     required String email,
   }) async {
     await api.post(
-      '/auth/recuperar-senha',
+      '/auth/forgot-password',
       body: {
         'email': email,
       },
@@ -51,17 +51,22 @@ class AuthService {
     required String novaSenha,
   }) async {
     await api.post(
-      '/auth/resetar-senha',
+      '/auth/reset-password',
       body: {
         'email': email,
-        'codigo': codigo,
-        'nova_senha': novaSenha,
+        'code': codigo,
+        'newPassword': novaSenha,
       },
       requiresAuth: false,
     );
   }
 
-  Future<void> logout() async {
-    await api.post('/auth/logout');
+  Future<void> logout(String? refreshToken) async {
+    await api.post(
+      '/auth/logout',
+      body: {
+        'refreshToken': refreshToken ?? '',
+      },
+    );
   }
 }

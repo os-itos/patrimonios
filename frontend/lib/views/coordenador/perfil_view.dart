@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '/app/routes/app_routes.dart';
-import '/controllers/auth_controller.dart';
-import '/controllers/perfil_controller.dart';
-import '/models/usuario.dart';
+import '../../app/routes/app_routes.dart';
+import '../../controllers/auth_controller.dart';
+import '../../controllers/perfil_controller.dart';
+import '../../models/usuario.dart';
 
-/// Tela de perfil.
-/// Rota: [AppRoutes.professorPerfil] (a mesma usada pela barra inferior).
+/// Tela de perfil do coordenador.
+/// Rota: [AppRoutes.adminPerfil].
 class PerfilView extends StatefulWidget {
   const PerfilView({super.key});
 
@@ -27,7 +27,7 @@ class _PerfilViewState extends State<PerfilView> {
   static const _blueLight = Color(0xFFEAF1FF);
   static const _red = Color(0xFFDC2626);
 
-  // A API (/me) não retorna dados da escola; ajuste aqui ou
+  // A API (/profile) não retorna dados da escola; ajuste aqui ou
   // mova para um service/endpoint quando existir.
   static const _nomeEscola = 'Escola Estadual D. Pedro II';
   static const _cnpj = '12.345.678/0001-90';

@@ -9,10 +9,9 @@ class ApiException implements Exception {
     this.data,
   });
 
+  /// As telas exibem `error.toString()`, então devolvemos só a mensagem.
   @override
-  String toString() {
-    return 'ApiException($statusCode): $message';
-  }
+  String toString() => message;
 }
 
 class NetworkException extends ApiException {

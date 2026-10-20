@@ -47,10 +47,23 @@ class _ProfessorListViewState extends State<ProfessorListView> {
     }
   }
 
+  /// A listagem não traz os bens de cada professor; por isso buscamos
+  /// os detalhes (GET /admin/professores/{id}) antes de abrir a tela.
   Future<void> _abrirDetalhes(Professor professor) async {
+    try {
+      await controller.carregarProfessor(professor.id);
+    } catch (error) {
+      Get.snackbar(
+        'Erro',
+        error.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
     await Get.toNamed(
       AppRoutes.adminDetalhesProfessor,
-      arguments: professor,
+      arguments: controller.professorSelecionado.value,
     );
     _carregar();
   }
@@ -327,7 +340,7 @@ class _ProfessorListViewState extends State<ProfessorListView> {
               Get.offAllNamed(AppRoutes.adminPatrimonios);
               break;
             case 3:
-              Get.offAllNamed(AppRoutes.professorPerfil);
+              Get.offAllNamed(AppRoutes.adminPerfil);
               break;
           }
         },

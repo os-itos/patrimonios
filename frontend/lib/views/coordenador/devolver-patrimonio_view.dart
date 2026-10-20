@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../controllers/patrimonio_controller.dart';
+import '../../models/patrimonio.dart';
 
 class DevolverPatrimonioView extends StatefulWidget {
   const DevolverPatrimonioView({
     super.key,
-    this.item = 'Projetor Epson PowerLite',
-    this.patrimonio = 'PAT-2023-0089',
-    this.responsavel = 'Prof. Mara Silva',
+    required this.patrimonio,
   });
 
-  final String item;
-  final String patrimonio;
-  final String responsavel;
+  final Patrimonio patrimonio;
 
   @override
   State<DevolverPatrimonioView> createState() =>
@@ -18,6 +18,8 @@ class DevolverPatrimonioView extends StatefulWidget {
 }
 
 class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
+  final PatrimonioController controller = Get.find<PatrimonioController>();
+
   final TextEditingController _observacoesController =
       TextEditingController();
 
@@ -29,21 +31,40 @@ class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
     super.dispose();
   }
 
-  void _confirmarDevolucao() {
+  Future<void> _confirmarDevolucao() async {
     FocusScope.of(context).unfocus();
 
-    // Aqui você pode chamar o controller/API responsável pela devolução.
-    //
-    // Exemplo:
-    // final controller = Get.find<PatrimonioController>();
-    // controller.devolverPatrimonio(...);
+    // A API recebe só um "motivo"; juntamos o estado e as observações.
+    final observacoes = _observacoesController.text.trim();
+    final motivo = observacoes.isEmpty
+        ? 'Estado na entrega: $_estadoConservacao'
+        : 'Estado na entrega: $_estadoConservacao. $observacoes';
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Devolução registrada com sucesso.'),
-        backgroundColor: Color(0xFF16A34A),
-      ),
-    );
+    try {
+      await controller.devolver(
+        patrimonioId: widget.patrimonio.id,
+        motivo: motivo,
+      );
+
+      // Volta para a tela anterior avisando que deu certo.
+      Get.back(result: true);
+
+      Get.snackbar(
+        'Sucesso',
+        'Devolução registrada com sucesso.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: const Color(0xFF16A34A),
+        colorText: Colors.white,
+        margin: const EdgeInsets.all(16),
+      );
+    } catch (error) {
+      Get.snackbar(
+        'Erro',
+        error.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+      );
+    }
   }
 
   @override
@@ -95,8 +116,9 @@ class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
             ),
           ],
         ),
+      ),
 
-        body: SafeArea(
+      body: SafeArea(
         top: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(18, 14, 18, 24),
@@ -136,7 +158,7 @@ class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
                     const SizedBox(height: 1),
 
                     Text(
-                      widget.item,
+                      widget.patrimonio.nome,
                       style: const TextStyle(
                         fontSize: 13,
                         height: 1.2,
@@ -148,7 +170,7 @@ class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
                     const SizedBox(height: 2),
 
                     Text(
-                      widget.patrimonio,
+                      widget.patrimonio.tombamento,
                       style: const TextStyle(
                         fontSize: 10,
                         height: 1.2,
@@ -179,7 +201,8 @@ class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
                     const SizedBox(height: 1),
 
                     Text(
-                      widget.responsavel,
+                      widget.patrimonio.professorNome ??
+                          'Professor #${widget.patrimonio.professorId ?? '-'}',
                       style: const TextStyle(
                         fontSize: 11,
                         height: 1.2,
@@ -337,8 +360,9 @@ class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
               SizedBox(
                 width: double.infinity,
                 height: 31,
-                child: ElevatedButton(
-                  onPressed: _confirmarDevolucao,
+                child: Obx(() => ElevatedButton(
+                  onPressed:
+                      controller.isLoading.value ? null : _confirmarDevolucao,
 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: greenColor,
@@ -361,16 +385,12 @@ class _DevolverPatrimonioViewState extends State<DevolverPatrimonioView> {
                   child: const Text(
                     'Confirmar Devolução',
                   ),
-                ),
+                )),
               ),
             ],
           ),
         ),
-      ) 
-       ),
+      ),
     );
   }
 }
-
-
-

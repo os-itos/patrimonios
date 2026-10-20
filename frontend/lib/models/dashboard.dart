@@ -13,8 +13,10 @@ class Dashboard {
     required this.categorias,
   });
 
+  /// [json] é o `PatrimonioStatsResponse` de
+  /// `GET /api/admin/patrimonios/stats`.
   factory Dashboard.fromJson(Map<String, dynamic> json) {
-    final rawCategorias = json['categorias'];
+    final rawCategorias = json['porCategoria'];
 
     final categorias = <String, int>{};
 
@@ -27,12 +29,12 @@ class Dashboard {
     }
 
     return Dashboard(
-      totalBens: (json['total_bens'] as num?)?.toInt() ?? 0,
+      totalBens: (json['totalPatrimonios'] as num?)?.toInt() ?? 0,
       disponiveis:
-          (json['disponiveis'] as num?)?.toInt() ?? 0,
-      emUso: (json['em_uso'] as num?)?.toInt() ?? 0,
+          (json['patrimoniosDisponiveis'] as num?)?.toInt() ?? 0,
+      emUso: (json['patrimoniosEmUso'] as num?)?.toInt() ?? 0,
       emManutencao:
-          (json['em_manutencao'] as num?)?.toInt() ?? 0,
+          (json['patrimoniosEmManutencao'] as num?)?.toInt() ?? 0,
       categorias: categorias,
     );
   }

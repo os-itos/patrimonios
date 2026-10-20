@@ -40,7 +40,7 @@ class _ProfessorPatrimoniosViewState
     if (termo.isEmpty) return controller.patrimonios;
 
     return controller.patrimonios.where((p) {
-      return p.descricao.toLowerCase().contains(termo) ||
+      return p.nome.toLowerCase().contains(termo) ||
           p.tombamento.toLowerCase().contains(termo) ||
           p.categoria.toLowerCase().contains(termo);
     }).toList();
@@ -202,7 +202,7 @@ class PatrimonioCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                patrimonio.descricao,
+                patrimonio.nome,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -278,6 +278,12 @@ class StatusBadge extends StatelessWidget {
           texto: 'Em manutenção',
           fundo: Color(0xFFFEE2E2),
           cor: Color(0xFFDC2626),
+        );
+      case StatusPatrimonio.baixado:
+        return const _Badge(
+          texto: 'Baixado',
+          fundo: Color(0xFFEEF0F4),
+          cor: Color(0xFF6B7280),
         );
     }
   }

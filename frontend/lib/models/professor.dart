@@ -21,8 +21,20 @@ class Professor {
     this.patrimonios = const [],
   });
 
-  factory Professor.fromJson(Map<String, dynamic> json) {
-    final rawPatrimonios = json['patrimonios'];
+  /// [json] é o objeto `ProfessorResponse` da API.
+  /// [patrimonios] vem separado na rota de detalhes do professor.
+  factory Professor.fromJson(
+    Map<String, dynamic> json, {
+    List<dynamic>? patrimonios,
+  }) {
+    final lista = patrimonios
+            ?.map(
+              (item) => Patrimonio.fromJson(
+                Map<String, dynamic>.from(item as Map),
+              ),
+            )
+            .toList() ??
+        const <Patrimonio>[];
 
     return Professor(
       id: (json['id'] as num).toInt(),
@@ -32,17 +44,8 @@ class Professor {
       matricula: json['matricula']?.toString(),
       departamento: json['departamento']?.toString(),
       quantidadePatrimonios:
-          (json['quantidade_patrimonios'] as num?)?.toInt() ??
-          (rawPatrimonios is List ? rawPatrimonios.length : 0),
-      patrimonios: rawPatrimonios is List
-          ? rawPatrimonios
-              .map(
-                (item) => Patrimonio.fromJson(
-                  Map<String, dynamic>.from(item as Map),
-                ),
-              )
-              .toList()
-          : const [],
+          (json['totalPatrimonios'] as num?)?.toInt() ?? lista.length,
+      patrimonios: lista,
     );
   }
 }

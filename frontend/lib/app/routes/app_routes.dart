@@ -6,6 +6,7 @@ class AppRoutes {
   static const recuperacao = '/recuperacao';
 
   static const admin = '/admin';
+  static const adminPerfil = '/admin/perfil';
   static const adminProfessores = '/admin/professores';
   static const adminCadastrarProfessor =
       '/admin/professores/cadastrar';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../app/routes/app_routes.dart';
 import '../../controllers/auth_controller.dart';
 import '../../controllers/dashboard_controller.dart';
 import '../../models/dashboard.dart';
@@ -16,7 +17,7 @@ class _C {
 
 /// Tela inicial do administrador.
 ///
-/// Consome `GET /api/dashboard` através do [DashboardController]
+/// Consome `GET /api/admin/patrimonios/stats` através do [DashboardController]
 /// (registrado no InitialBinding). Não faz nenhuma chamada HTTP aqui.
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -56,14 +57,18 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
-  void _emBreve(int index) {
-    if (index == 0) return;
-
-    Get.snackbar(
-      'Em breve',
-      'Esta área ainda não está disponível.',
-      snackPosition: SnackPosition.BOTTOM,
-    );
+  void _navegar(int index) {
+    switch (index) {
+      case 1:
+        Get.offAllNamed(AppRoutes.adminPatrimonios);
+        break;
+      case 2:
+        Get.offAllNamed(AppRoutes.adminProfessores);
+        break;
+      case 3:
+        Get.offAllNamed(AppRoutes.adminPerfil);
+        break;
+    }
   }
 
   @override
@@ -99,7 +104,7 @@ class _DashboardViewState extends State<DashboardView> {
         backgroundColor: Colors.white,
         indicatorColor: Colors.transparent,
         selectedIndex: 0,
-        onDestinationSelected: _emBreve,
+        onDestinationSelected: _navegar,
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),

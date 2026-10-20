@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/patrimonio_controller.dart';
+
 class CadastroPatrimonioView extends StatefulWidget {
 const CadastroPatrimonioView({super.key});
 
@@ -10,6 +12,8 @@ _CadastroPatrimonioViewState();
 }
 
 class _CadastroPatrimonioViewState extends State<CadastroPatrimonioView> {
+final PatrimonioController controller = Get.find<PatrimonioController>();
+
 final _formKey = GlobalKey<FormState>();
 
 final TextEditingController nomeController = TextEditingController();
@@ -47,7 +51,7 @@ observacoesController.dispose();
 super.dispose();
 }
 
-void salvarPatrimonio() {
+Future<void> salvarPatrimonio() async {
 if (!_formKey.currentState!.validate()) {
 return;
 }
@@ -76,33 +80,39 @@ if (estadoSelecionado == null) {
   return;
 }
 
-// Dados preenchidos no formulário.
-final patrimonio = {
-  'nome': nomeController.text.trim(),
-  'codigo_tombamento': codigoController.text.trim(),
-  'categoria': categoriaSelecionada,
-  'numero_serie': serieController.text.trim(),
-  'estado_conservacao': estadoSelecionado,
-  'observacoes': observacoesController.text.trim(),
-};
+try {
+  await controller.cadastrar(
+    nome: nomeController.text.trim(),
+    tombamento: codigoController.text.trim(),
+    categoria: categoriaSelecionada!,
+    numeroSerie: serieController.text.trim(),
+    estadoConservacao: estadoSelecionado,
+    observacoes: observacoesController.text.trim(),
+  );
 
-debugPrint('Patrimônio cadastrado: $patrimonio');
+  // Fecha a tela antes do snackbar: com um snackbar aberto,
+  // o Get.back() fecharia só o snackbar.
+  Get.back();
 
-Get.snackbar(
-  'Sucesso',
-  'Patrimônio cadastrado com sucesso!',
-  snackPosition: SnackPosition.BOTTOM,
-  backgroundColor: Colors.green,
-  colorText: Colors.white,
-  margin: const EdgeInsets.all(16),
-  duration: const Duration(seconds: 2),
-);
-
-Future.delayed(const Duration(milliseconds: 500), () {
-  if (mounted) {
-    Get.back();
-  }
-});
+  Get.snackbar(
+    'Sucesso',
+    'Patrimônio cadastrado com sucesso!',
+    snackPosition: SnackPosition.BOTTOM,
+    backgroundColor: Colors.green,
+    colorText: Colors.white,
+    margin: const EdgeInsets.all(16),
+    duration: const Duration(seconds: 2),
+  );
+} catch (error) {
+  Get.snackbar(
+    'Erro',
+    error.toString(),
+    snackPosition: SnackPosition.BOTTOM,
+    backgroundColor: Colors.red,
+    colorText: Colors.white,
+    margin: const EdgeInsets.all(16),
+  );
+}
 
 }
 

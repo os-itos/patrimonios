@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '/models/professor.dart';
-import '/models/patrimonio.dart';
+import '../../app/routes/app_routes.dart';
+import '../../models/patrimonio.dart';
+import '../../models/professor.dart';
 
 class ProfessorDetailView extends StatelessWidget {
   final Professor professor;
@@ -170,6 +172,22 @@ class ProfessorDetailView extends StatelessWidget {
         selectedFontSize: 9,
         unselectedFontSize: 9,
         elevation: 8,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              Get.offAllNamed(AppRoutes.admin);
+              break;
+            case 1:
+              Get.offAllNamed(AppRoutes.adminPatrimonios);
+              break;
+            case 2:
+              Get.offAllNamed(AppRoutes.adminProfessores);
+              break;
+            case 3:
+              Get.offAllNamed(AppRoutes.adminPerfil);
+              break;
+          }
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
@@ -211,7 +229,7 @@ class ProfessorDetailView extends StatelessWidget {
         children: [
           // DESCRIÇÃO
           Text(
-            patrimonio.descricao,
+            patrimonio.nome,
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,

@@ -60,7 +60,7 @@ class ProfessorPatrimonioDetalhesView extends StatelessWidget {
             ),
             child: Column(
               children: [
-                _Campo(rotulo: 'Nome', valor: patrimonio.descricao),
+                _Campo(rotulo: 'Nome', valor: patrimonio.nome),
                 _Campo(
                   rotulo: 'Código/Tombamento',
                   valor: patrimonio.tombamento,

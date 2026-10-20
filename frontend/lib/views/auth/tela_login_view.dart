@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../controllers/auth_controller.dart';
 
 class TelaLoginView extends StatefulWidget {
   const TelaLoginView({super.key});
@@ -14,7 +17,40 @@ class _TelaLoginViewState extends State<TelaLoginView> {
   final TextEditingController senhaController =
       TextEditingController();
 
+  final AuthController auth = Get.find<AuthController>();
+
   bool esconderSenha = true;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    senhaController.dispose();
+    super.dispose();
+  }
+
+  Future<void> entrar() async {
+    final email = emailController.text.trim();
+    final senha = senhaController.text;
+
+    if (!GetUtils.isEmail(email) || senha.isEmpty) {
+      Get.snackbar(
+        'Atenção',
+        'Informe um e-mail válido e a senha.',
+        snackPosition: SnackPosition.BOTTOM,
+        margin: const EdgeInsets.all(16),
+      );
+      return;
+    }
+
+    FocusScope.of(context).unfocus();
+
+    try {
+      // Em caso de sucesso o AuthController já redireciona pela role.
+      await auth.login(email: email, senha: senha);
+    } catch (_) {
+      // A mensagem fica em auth.errorMessage e aparece abaixo do botão.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,8 +190,20 @@ class _TelaLoginViewState extends State<TelaLoginView> {
                     TextField(
                       controller: senhaController,
                       obscureText: esconderSenha,
+                      onSubmitted: (_) => entrar(),
                       decoration: InputDecoration(
                         hintText: 'Digite sua senha',
+                        suffixIcon: IconButton(
+                          onPressed: () => setState(
+                            () => esconderSenha = !esconderSenha,
+                          ),
+                          icon: Icon(
+                            esconderSenha
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            color: const Color(0xFF7A8496),
+                          ),
+                        ),
                         hintStyle: const TextStyle(
                           color: Color(0xFF7A8496),
                         ),
@@ -189,10 +237,8 @@ class _TelaLoginViewState extends State<TelaLoginView> {
                     SizedBox(
                       width: double.infinity,
                       height: 40,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Login futuramente
-                        },
+                      child: Obx(() => ElevatedButton(
+                        onPressed: auth.isLoading.value ? null : entrar,
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               const Color(0xFF2563EB),
@@ -203,15 +249,41 @@ class _TelaLoginViewState extends State<TelaLoginView> {
                                 BorderRadius.circular(7),
                           ),
                         ),
-                        child: const Text(
-                          'Entrar',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                        child: auth.isLoading.value
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text(
+                                'Entrar',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                      )),
+                    ),
+
+                    // MENSAGEM DE ERRO DA API (ex.: e-mail ou senha incorretos)
+                    Obx(() {
+                      final erro = auth.errorMessage.value;
+                      if (erro.isEmpty) return const SizedBox.shrink();
+
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Text(
+                          erro,
+                          style: const TextStyle(
+                            color: Color(0xFFDC2626),
+                            fontSize: 13,
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
 
                     const SizedBox(height: 22),
 

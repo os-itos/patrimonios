@@ -31,7 +31,19 @@ class _AtribuirItemState extends State<AtribuirItem> {
   void initState() {
     super.initState();
 
-    professorController.carregarProfessores();
+    _carregarProfessores();
+  }
+
+  Future<void> _carregarProfessores() async {
+    try {
+      await professorController.carregarProfessores();
+    } catch (error) {
+      Get.snackbar(
+        'Erro',
+        error.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 
   Future<void> _confirmarAtribuicao() async {
@@ -50,7 +62,8 @@ class _AtribuirItemState extends State<AtribuirItem> {
         professorId: professorSelecionado!,
       );
 
-      Get.back();
+      // result: true avisa a tela de detalhes que a atribuição deu certo.
+      Get.back(result: true);
 
       Get.snackbar(
         'Sucesso',
@@ -60,7 +73,7 @@ class _AtribuirItemState extends State<AtribuirItem> {
     } catch (error) {
       Get.snackbar(
         'Erro',
-        'Não foi possível atribuir o item.',
+        error.toString(),
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -127,7 +140,7 @@ class _AtribuirItemState extends State<AtribuirItem> {
                           const SizedBox(height: 10),
 
                           Text(
-                            patrimonio.descricao,
+                            patrimonio.nome,
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,

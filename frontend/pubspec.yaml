@@ -23,3 +23,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+# O path_provider_foundation 2.5+ depende do pacote objective_c, cujo build
+# hook falha quando o caminho do Flutter tem espaço (ex.: C:\Users\Aluno 01).
+# A versão 2.4.x não usa esse hook. Pode remover se o SDK estiver num
+# caminho sem espaços.
+dependency_overrides:
+  path_provider_foundation: 2.4.1

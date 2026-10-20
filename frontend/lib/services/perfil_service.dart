@@ -7,7 +7,7 @@ class PerfilService {
   const PerfilService(this.api);
 
   Future<Usuario> buscar() async {
-    final response = await api.get('/me');
+    final response = await api.get('/profile');
 
     return Usuario.fromJson(
       Map<String, dynamic>.from(response as Map),
@@ -19,23 +19,23 @@ class PerfilService {
     String? telefone,
   }) async {
     await api.put(
-      '/me',
+      '/profile',
       body: {
-        'nome': nome,
-        'telefone': telefone,
+        if (nome != null) 'nome': nome,
+        if (telefone != null) 'telefone': telefone,
       },
     );
   }
 
+  /// A API troca a senha pela mesma rota do perfil (`newPassword`)
+  /// e não pede a senha atual.
   Future<void> alterarSenha({
-    required String senhaAtual,
     required String novaSenha,
   }) async {
     await api.put(
-      '/me/senha',
+      '/profile',
       body: {
-        'senha_atual': senhaAtual,
-        'nova_senha': novaSenha,
+        'newPassword': novaSenha,
       },
     );
   }

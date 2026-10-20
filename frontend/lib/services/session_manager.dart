@@ -20,6 +20,7 @@ class SessionManager {
   Future<void> setSession({
     required String token,
     required Usuario user,
+    String? refreshToken,
   }) async {
     _token = token;
     isAuthenticated.value = true;
@@ -27,6 +28,10 @@ class SessionManager {
 
     await storage.saveToken(token);
     await storage.saveUser(user);
+
+    if (refreshToken != null) {
+      await storage.saveRefreshToken(refreshToken);
+    }
   }
 
   Future<void> loadStoredSession() async {
@@ -50,7 +55,9 @@ class SessionManager {
   Future<void> expireSession() async {
     await clear();
 
-    if (Get.currentRoute != AppRoutes.login) {
+    // Antes do runApp (restauração de sessão) ainda não há navegador.
+    if (Get.key.currentState != null &&
+        Get.currentRoute != AppRoutes.login) {
       Get.offAllNamed(AppRoutes.login);
     }
   }

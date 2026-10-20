@@ -7,7 +7,7 @@ class DashboardService {
   const DashboardService(this.api);
 
   Future<Dashboard> buscar() async {
-    final response = await api.get('/dashboard');
+    final response = await api.get('/admin/patrimonios/stats');
 
     return Dashboard.fromJson(
       Map<String, dynamic>.from(response as Map),

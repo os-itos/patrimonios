@@ -1,13 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '/controllers/patrimonio_controller.dart';
-import '/models/patrimonio.dart';
+import '../../app/routes/app_routes.dart';
+import '../../controllers/auth_controller.dart';
+import '../../controllers/patrimonio_controller.dart';
+import '../../models/patrimonio.dart';
 
-class ProfessorHomeView extends StatelessWidget {
-  ProfessorHomeView({super.key});
+class ProfessorHomeView extends StatefulWidget {
+  const ProfessorHomeView({super.key});
 
+  @override
+  State<ProfessorHomeView> createState() => _ProfessorHomeViewState();
+}
+
+class _ProfessorHomeViewState extends State<ProfessorHomeView> {
   final PatrimonioController controller = Get.find<PatrimonioController>();
+  final AuthController auth = Get.find<AuthController>();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.limparFiltros();
+    _carregar();
+  }
+
+  Future<void> _carregar() async {
+    try {
+      // Para o professor, a API devolve só os bens atribuídos a ele.
+      await controller.carregarPatrimonios();
+    } catch (_) {
+      // A mensagem fica em controller.errorMessage.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +67,9 @@ class ProfessorHomeView extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 2),
-                              const Text(
-                                'Olá, Professor',
-                                style: TextStyle(
+                              Text(
+                                'Olá, ${auth.currentUser.value?.nome ?? 'Professor'}',
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFF202938),
@@ -145,7 +169,26 @@ class ProfessorHomeView extends StatelessWidget {
                       const SizedBox(height: 10),
 
                       // LISTA DOS PATRIMÔNIOS
-                      if (controller.patrimonios.isEmpty)
+                      if (controller.errorMessage.value.isNotEmpty &&
+                          controller.patrimonios.isEmpty)
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(30),
+                            child: Column(
+                              children: [
+                                Text(
+                                  controller.errorMessage.value,
+                                  textAlign: TextAlign.center,
+                                ),
+                                TextButton(
+                                  onPressed: _carregar,
+                                  child: const Text('Tentar novamente'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      else if (controller.patrimonios.isEmpty)
                         const Center(
                           child: Padding(
                             padding: EdgeInsets.all(30),
@@ -186,7 +229,7 @@ class ProfessorHomeView extends StatelessWidget {
         children: [
           // DESCRIÇÃO
           Text(
-            patrimonio.descricao,
+            patrimonio.nome,
             style: const TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.bold,
@@ -279,6 +322,11 @@ class ProfessorHomeView extends StatelessWidget {
         cor = Colors.orange;
         fundo = const Color(0xFFFFF3E0);
         break;
+
+      case StatusPatrimonio.baixado:
+        cor = Colors.grey;
+        fundo = const Color(0xFFEEF0F4);
+        break;
     }
 
     return Container(
@@ -305,35 +353,56 @@ class ProfessorHomeView extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _itemMenu(Icons.home_outlined, 'Início', true),
-          _itemMenu(Icons.inventory_2_outlined, 'Patrimônios', false),
-          _itemMenu(Icons.person_outline, 'Perfil', false),
+          _itemMenu(Icons.home_outlined, 'Início', true, null),
+          _itemMenu(
+            Icons.inventory_2_outlined,
+            'Patrimônios',
+            false,
+            AppRoutes.professorPatrimonios,
+          ),
+          _itemMenu(
+            Icons.person_outline,
+            'Perfil',
+            false,
+            AppRoutes.professorPerfil,
+          ),
         ],
       ),
     );
   }
 
   // ITEM DO MENU
-  Widget _itemMenu(IconData icone, String texto, bool selecionado) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          icone,
-          size: 21,
-          color: selecionado ? Colors.blue : Colors.grey[600],
-        ),
+  Widget _itemMenu(
+    IconData icone,
+    String texto,
+    bool selecionado,
+    String? rota,
+  ) {
+    return InkWell(
+      onTap: rota == null ? null : () => Get.offAllNamed(rota),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icone,
+              size: 21,
+              color: selecionado ? Colors.blue : Colors.grey[600],
+            ),
 
-        const SizedBox(height: 2),
+            const SizedBox(height: 2),
 
-        Text(
-          texto,
-          style: TextStyle(
-            fontSize: 10,
-            color: selecionado ? Colors.blue : Colors.grey[600],
-          ),
+            Text(
+              texto,
+              style: TextStyle(
+                fontSize: 10,
+                color: selecionado ? Colors.blue : Colors.grey[600],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

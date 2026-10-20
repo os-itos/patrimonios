@@ -1,10 +1,72 @@
 import 'package:flutter/material.dart';
-import '/models/patrimonio.dart';
+import 'package:get/get.dart';
+
+import '../../app/routes/app_routes.dart';
+import '../../controllers/patrimonio_controller.dart';
+import '../../models/patrimonio.dart';
 
 class PatrimonioDetailView extends StatelessWidget {
   final Patrimonio patrimonio;
 
   const PatrimonioDetailView({super.key, required this.patrimonio});
+
+  bool get _emUso => patrimonio.status == StatusPatrimonio.emUso;
+
+  /// Disponível -> tela de atribuição; em uso -> tela de devolução.
+  /// Se a ação deu certo, fecha os detalhes para a lista recarregar.
+  Future<void> _atribuirOuDevolver(BuildContext context) async {
+    final navigator = Navigator.of(context);
+
+    final concluido = await Get.toNamed(
+      _emUso
+          ? AppRoutes.adminDevolverPatrimonio
+          : AppRoutes.adminAtribuirPatrimonio,
+      arguments: patrimonio,
+    );
+
+    // Navigator.pop (e não Get.back) porque o snackbar de sucesso
+    // ainda está aberto e o Get.back fecharia só ele.
+    if (concluido == true) navigator.pop();
+  }
+
+  Future<void> _excluir(BuildContext context) async {
+    final navigator = Navigator.of(context);
+
+    final confirmar = await Get.dialog<bool>(
+      AlertDialog(
+        title: const Text('Excluir patrimônio'),
+        content: Text('Deseja excluir "${patrimonio.nome}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Get.back(result: true),
+            child: const Text('Excluir', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmar != true) return;
+
+    try {
+      await Get.find<PatrimonioController>().excluir(patrimonio.id);
+      navigator.pop();
+      Get.snackbar(
+        'Sucesso',
+        'Patrimônio excluído.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (error) {
+      Get.snackbar(
+        'Erro',
+        error.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +136,7 @@ class PatrimonioDetailView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // NOME
-                  campo('Nome', patrimonio.descricao),
+                  campo('Nome', patrimonio.nome),
 
                   // TOMBAMENTO
                   campo('Código/Tombamento', patrimonio.tombamento),
@@ -102,8 +164,10 @@ class PatrimonioDetailView extends StatelessWidget {
 
                   // PROFESSOR
                   campo(
-                    'Professor ID',
-                    patrimonio.professorId?.toString() ?? 'Não atribuído',
+                    'Professor',
+                    patrimonio.professorNome ??
+                        patrimonio.professorId?.toString() ??
+                        'Não atribuído',
                   ),
 
                   // DATA DA ATRIBUIÇÃO
@@ -125,9 +189,11 @@ class PatrimonioDetailView extends StatelessWidget {
                 // EDITAR
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () {
-                      // Tela de edição
-                    },
+                    onPressed: () => Get.snackbar(
+                      'Em breve',
+                      'A edição de patrimônio ainda não está disponível.',
+                      snackPosition: SnackPosition.BOTTOM,
+                    ),
 
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.blue,
@@ -150,9 +216,7 @@ class PatrimonioDetailView extends StatelessWidget {
                 // EXCLUIR
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () {
-                      // Excluir patrimônio
-                    },
+                    onPressed: () => _excluir(context),
 
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.red,
@@ -179,9 +243,12 @@ class PatrimonioDetailView extends StatelessWidget {
               width: double.infinity,
 
               child: ElevatedButton(
-                onPressed: () {
-                  // Devolver equipamento
-                },
+                // Atribuir só vale para itens disponíveis e devolver só
+                // para itens em uso; nos demais status o botão fica inativo.
+                onPressed: _emUso ||
+                        patrimonio.status == StatusPatrimonio.disponivel
+                    ? () => _atribuirOuDevolver(context)
+                    : null,
 
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF16A34A),
@@ -195,8 +262,8 @@ class PatrimonioDetailView extends StatelessWidget {
                   ),
                 ),
 
-                child: const Text(
-                  'Devolver Equipamento',
+                child: Text(
+                  _emUso ? 'Devolver Equipamento' : 'Atribuir a Professor',
 
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),

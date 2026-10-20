@@ -59,25 +59,30 @@ class PatrimonioController extends GetxController {
 
   Future<void> cadastrar({
     required String tombamento,
-    required String descricao,
+    required String nome,
     required String categoria,
+    String? descricao,
     String? marca,
+    String? modelo,
     String? numeroSerie,
+    String? estadoConservacao,
     String? localizacao,
-    StatusPatrimonio status =
-        StatusPatrimonio.disponivel,
+    String? observacoes,
   }) async {
     isLoading.value = true;
 
     try {
       await service.cadastrar(
         tombamento: tombamento,
-        descricao: descricao,
+        nome: nome,
         categoria: categoria,
+        descricao: descricao,
         marca: marca,
+        modelo: modelo,
         numeroSerie: numeroSerie,
+        estadoConservacao: estadoConservacao,
         localizacao: localizacao,
-        status: status,
+        observacoes: observacoes,
       );
 
       await carregarPatrimonios();
@@ -88,11 +93,15 @@ class PatrimonioController extends GetxController {
 
   Future<void> atualizar({
     required int id,
+    String? nome,
     String? descricao,
     String? categoria,
     String? marca,
+    String? modelo,
     String? numeroSerie,
+    String? estadoConservacao,
     String? localizacao,
+    String? observacoes,
     StatusPatrimonio? status,
   }) async {
     isLoading.value = true;
@@ -100,11 +109,15 @@ class PatrimonioController extends GetxController {
     try {
       await service.atualizar(
         id: id,
+        nome: nome,
         descricao: descricao,
         categoria: categoria,
         marca: marca,
+        modelo: modelo,
         numeroSerie: numeroSerie,
+        estadoConservacao: estadoConservacao,
         localizacao: localizacao,
+        observacoes: observacoes,
         status: status,
       );
 

@@ -7,6 +7,7 @@ class PatrimonioService {
 
   const PatrimonioService(this.api);
 
+  /// Admin recebe todos os bens; professor recebe só os dele (RBAC na API).
   Future<List<Patrimonio>> listar({
     StatusPatrimonio? status,
     String? categoria,
@@ -34,7 +35,10 @@ class PatrimonioService {
           query.isEmpty ? null : query,
     );
 
-    final list = List<dynamic>.from(response as List);
+    // Resposta: { "total": 3, "role": "...", "items": [ ... ] }
+    final list = List<dynamic>.from(
+      (response as Map)['items'] as List? ?? const [],
+    );
 
     return list
         .map(
@@ -57,45 +61,59 @@ class PatrimonioService {
 
   Future<void> cadastrar({
     required String tombamento,
-    required String descricao,
+    required String nome,
     required String categoria,
+    String? descricao,
     String? marca,
+    String? modelo,
     String? numeroSerie,
+    String? estadoConservacao,
     String? localizacao,
-    StatusPatrimonio status = StatusPatrimonio.disponivel,
+    String? observacoes,
   }) async {
     await api.post(
       '/patrimonios',
       body: {
-        'tombamento': tombamento,
-        'descricao': descricao,
+        'codigo': tombamento,
+        'nome': nome,
         'categoria': categoria,
-        'marca': marca,
-        'numero_serie': numeroSerie,
-        'localizacao': localizacao,
-        'status': status.apiValue,
+        if (descricao != null) 'descricao': descricao,
+        if (marca != null) 'marca': marca,
+        if (modelo != null) 'modelo': modelo,
+        if (numeroSerie != null) 'numeroSerie': numeroSerie,
+        if (estadoConservacao != null) 'estadoConservacao': estadoConservacao,
+        if (localizacao != null) 'localizacao': localizacao,
+        if (observacoes != null) 'observacoes': observacoes,
       },
     );
   }
 
   Future<void> atualizar({
     required int id,
+    String? nome,
     String? descricao,
     String? categoria,
     String? marca,
+    String? modelo,
     String? numeroSerie,
+    String? estadoConservacao,
     String? localizacao,
+    String? observacoes,
     StatusPatrimonio? status,
   }) async {
     await api.put(
       '/patrimonios/$id',
       body: {
-        'descricao': descricao,
-        'categoria': categoria,
-        'marca': marca,
-        'numero_serie': numeroSerie,
-        'localizacao': localizacao,
-        'status': status?.apiValue,
+        if (nome != null) 'nome': nome,
+        if (descricao != null) 'descricao': descricao,
+        if (categoria != null) 'categoria': categoria,
+        if (marca != null) 'marca': marca,
+        if (modelo != null) 'modelo': modelo,
+        if (numeroSerie != null) 'numeroSerie': numeroSerie,
+        if (estadoConservacao != null) 'estadoConservacao': estadoConservacao,
+        if (localizacao != null) 'localizacao': localizacao,
+        if (observacoes != null) 'observacoes': observacoes,
+        if (status != null) 'status': status.apiValue,
       },
     );
   }
@@ -109,9 +127,9 @@ class PatrimonioService {
     required int professorId,
   }) async {
     await api.post(
-      '/patrimonios/$patrimonioId/atribuir',
+      '/admin/patrimonios/$patrimonioId/atribuir',
       body: {
-        'professor_id': professorId,
+        'professorId': professorId,
       },
     );
   }
@@ -121,9 +139,9 @@ class PatrimonioService {
     String? motivo,
   }) async {
     await api.post(
-      '/patrimonios/$patrimonioId/devolver',
+      '/admin/patrimonios/$patrimonioId/desatribuir',
       body: {
-        'motivo': motivo,
+        if (motivo != null) 'motivo': motivo,
       },
     );
   }
@@ -132,10 +150,13 @@ class PatrimonioService {
     int patrimonioId,
   ) async {
     final response = await api.get(
-      '/patrimonios/$patrimonioId/historico',
+      '/admin/patrimonios/$patrimonioId/historico',
     );
 
-    final list = List<dynamic>.from(response as List);
+    // Resposta: { "patrimonioId": 1, "total": 2, "historico": [ ... ] }
+    final list = List<dynamic>.from(
+      (response as Map)['historico'] as List? ?? const [],
+    );
 
     return list
         .map(

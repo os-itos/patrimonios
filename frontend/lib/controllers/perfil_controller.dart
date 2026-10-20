@@ -44,6 +44,8 @@ class PerfilController extends GetxController {
     }
   }
 
+  /// A API não confere a senha atual (só recebe `newPassword`);
+  /// ela continua sendo pedida no formulário como confirmação do usuário.
   Future<void> alterarSenha({
     required String senhaAtual,
     required String novaSenha,
@@ -52,7 +54,6 @@ class PerfilController extends GetxController {
 
     try {
       await service.alterarSenha(
-        senhaAtual: senhaAtual,
         novaSenha: novaSenha,
       );
     } finally {

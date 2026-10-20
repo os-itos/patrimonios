@@ -323,7 +323,7 @@ class _PatrimonioListViewState extends State<PatrimonioListView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                patrimonio.descricao,
+                patrimonio.nome,
                 style: const TextStyle(
                   color: _title,
                   fontSize: 15,
@@ -369,6 +369,12 @@ class _PatrimonioListViewState extends State<PatrimonioListView> {
           'Em Manutenção',
           Color(0xFFDC2626),
           Color(0xFFFEE2E2),
+        );
+      case StatusPatrimonio.baixado:
+        return const _StatusStyle(
+          'Baixado',
+          Color(0xFF6B7280),
+          Color(0xFFEEF0F4),
         );
     }
   }
@@ -416,7 +422,7 @@ class _PatrimonioListViewState extends State<PatrimonioListView> {
               Get.offAllNamed(AppRoutes.adminProfessores);
               break;
             case 3:
-              Get.offAllNamed(AppRoutes.professorPerfil);
+              Get.offAllNamed(AppRoutes.adminPerfil);
               break;
           }
         },
