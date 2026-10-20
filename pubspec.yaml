@@ -1,0 +1,33 @@
+name: patrimonio_escolar
+description: Base Flutter do Sistema Integrado de Gestao de Patrimonio Escolar.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  get: ^4.7.3
+  http: ^1.6.0
+  flutter_secure_storage: ^11.2.0
+  intl: ^0.20.2
+  device_preview: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+# O path_provider_foundation 2.5+ depende do pacote objective_c, cujo build
+# hook falha quando o caminho do Flutter tem espaço (ex.: C:\Users\Aluno 01).
+# A versão 2.4.x não usa esse hook. Pode remover se o SDK estiver num
+# caminho sem espaços.
+dependency_overrides:
+  path_provider_foundation: 2.4.1
